@@ -23,6 +23,12 @@ has repo => (
 	lazy => 1,
 );
 
+has mode => (
+	is      => 'ro',
+	isa     => 'Str',
+	default => 'https'
+);
+
 sub _build_repo {
 	my ($self, $login) = @_;
 
@@ -43,7 +49,7 @@ sub metadata {
 	my $repo = $self->repo;
 	my $html_url = "https://github.com/$repo";
 	my $issues_url = "$html_url/issues";
-	my $git_url = "git://github.com/$repo.git";
+	my $git_url = $self->mode eq 'https' ?  "$html_url.git" : "git\@github.com:$repo.git";
 
 	return {
 		resources => {
